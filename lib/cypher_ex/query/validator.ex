@@ -12,7 +12,7 @@ defmodule CypherEx.Query.Validator do
       end)
 
     unless Enum.empty?(invalid_rel_labels) do
-      raise ArgumentError,
+      raise CypherEx.InvalidLabelsError,
         message: "Invalid labels #{inspect(invalid_rel_labels)} against #{inspect(schema)}"
     end
 
@@ -31,7 +31,8 @@ defmodule CypherEx.Query.Validator do
         :ok
 
       {key, val} ->
-        raise ArgumentError, message: "Invalid property type given: #{key}: #{val}"
+        raise CypherEx.InvalidPropertyError,
+          message: "Invalid property type given: #{key}: #{val}"
     end)
 
     props
@@ -61,7 +62,7 @@ defmodule CypherEx.Query.Validator do
     new_rel =
       cond do
         Enum.empty?(source_rels) && Enum.empty?(target_rels) ->
-          raise ArgumentError,
+          raise CypherEx.BadQueryError,
             message:
               "No valid relationsship exists between #{inspect(source_node.schema)} and #{
                 inspect(target_node.schema)

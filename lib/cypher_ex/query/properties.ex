@@ -20,7 +20,8 @@ defmodule CypherEx.Query.Properties do
         :ok
 
       {key, val} ->
-        raise ArgumentError, message: "Invalid property type given: #{key}: #{val}"
+        raise CypherEx.InvalidPropertyError,
+          message: "Invalid property type given: #{key}: #{val}"
     end)
 
     props

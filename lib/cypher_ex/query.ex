@@ -45,7 +45,7 @@ defmodule CypherEx.Query do
         end)
 
       unless valid_bindings? do
-        raise ArgumentError,
+        raise CypherEx.NoValidBindingsError,
           message:
             "WHERE statement must references prior bindings to this match clauses and no WITH clauses were included."
       end

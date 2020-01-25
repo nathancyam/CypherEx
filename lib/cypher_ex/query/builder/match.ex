@@ -20,7 +20,6 @@ defimpl String.Chars, for: CypherEx.Query.Builder.MatchExpr do
   end
 
   def to_string(%CypherEx.Query.Builder.MatchExpr{paths: paths, where: where, optional?: false}) do
-    IO.inspect(paths)
     ps = Enum.join(paths, "\n")
     "MATCH #{ps} #{String.Chars.to_string(where)}"
   end

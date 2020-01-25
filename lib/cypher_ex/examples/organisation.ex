@@ -9,7 +9,17 @@ defmodule CypherEx.Examples.Organisation do
   end
 
   relations do
-    outgoing(:governs, __MODULE__)
-    incoming(:child_of, __MODULE__)
+    outgoing(:governs, __MODULE__) do
+      property(:created_at, :number)
+      property(:updated_at, :number)
+    end
+
+    incoming(:child_of, __MODULE__) do
+      property(:position, :string)
+    end
+
+    outgoing(:works, CypherEx.Examples.Employee) do
+      property(:started_date, :string)
+    end
   end
 end

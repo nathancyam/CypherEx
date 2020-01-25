@@ -46,12 +46,13 @@ defmodule CypherEx.Query.ValidatorTest do
           },
           %CypherEx.Query.Builder.RelationExpr{
             direction: :bidirectional,
-            labels: [
-              {:outgoing, :governs, CypherEx.Examples.Organisation},
-              {:incoming, :child_of, CypherEx.Examples.Organisation}
-            ],
             properties: [id: "dsf"],
-            var: nil
+            var: nil,
+            labels: [
+              {:outgoing, :governs, CypherEx.Examples.Organisation,
+               [created_at: :number, updated_at: :number]},
+              {:incoming, :child_of, CypherEx.Examples.Organisation, [position: :string]}
+            ]
           },
           %CypherEx.Query.Builder.NodeExpr{
             properties: [],
@@ -60,9 +61,9 @@ defmodule CypherEx.Query.ValidatorTest do
           },
           %CypherEx.Query.Builder.RelationExpr{
             direction: :right_to_left,
-            labels: [{:outgoing, :works_at, CypherEx.Examples.Organisation}],
             properties: [id: "test"],
-            var: nil
+            var: nil,
+            labels: [{:outgoing, :works_at, CypherEx.Examples.Organisation, []}]
           },
           %CypherEx.Query.Builder.NodeExpr{
             properties: [],

@@ -41,7 +41,7 @@ end
 defimpl String.Chars, for: CypherEx.Query.Builder.RelationExpr do
   def to_string(%CypherEx.Query.Builder.RelationExpr{} = expr) do
     labels =
-      Enum.map(expr.labels, fn {_dir, label, _schema} ->
+      Enum.map(expr.labels, fn {_dir, label, _schema, _props} ->
         Atom.to_string(label)
         |> (fn l -> ":#{l}" end).()
         |> String.upcase()

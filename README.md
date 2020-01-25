@@ -84,6 +84,7 @@ If the relationship between nodes is invalid, the query will fail at _runtime_ a
 
 ### Todo
 
+- [x] Add properties to relationships.
+- [ ] Add validations on relationships properties.
 - [ ] Add create function to generate nodes.
 - [ ] Add proper variable binding support.
-- [ ] Add properties to relationships.

@@ -108,7 +108,7 @@ defmodule CypherEx.Query.Validator do
 
   defp label_directions(labels) do
     labels
-    |> Enum.map(fn {dir, _, _} -> dir end)
+    |> Enum.map(fn {dir, _, _, _} -> dir end)
     |> Enum.uniq()
     |> to_rel_repl()
   end

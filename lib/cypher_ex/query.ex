@@ -101,7 +101,7 @@ defimpl String.Chars, for: CypherEx.Query do
     collected_expressions = reduce_matches(matches, withs)
     joined_returns = Enum.join(returns, ", ")
 
-    "#{collected_expressions} RETURN #{joined_returns}"
+    "#{collected_expressions} RETURN #{joined_returns}" |> String.trim()
   end
 
   defp reduce_matches(result \\ "", matches, with)

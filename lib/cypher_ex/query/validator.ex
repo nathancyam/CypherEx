@@ -64,7 +64,7 @@ defmodule CypherEx.Query.Validator do
         Enum.empty?(source_rels) && Enum.empty?(target_rels) ->
           raise CypherEx.BadQueryError,
             message:
-              "No valid relationsship exists between #{inspect(source_node.schema)} and #{
+              "No valid relationship exists between #{inspect(source_node.schema)} and #{
                 inspect(target_node.schema)
               }. Labels provided were: #{rels}"
 

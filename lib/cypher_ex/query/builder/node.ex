@@ -16,7 +16,6 @@ defmodule CypherEx.Query.Builder.NodeExpr do
 
   def build(%PathExpr{path: path} = expr, var, schema, properties) do
     %RelationExpr{labels: labels} = List.last(path)
-    Validator.check_node_relations!(schema, labels)
     Validator.check_properties!(properties)
     %{expr | path: path ++ [build(var, schema, properties)]}
   end

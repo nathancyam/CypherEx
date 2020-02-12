@@ -75,11 +75,13 @@ defmodule CypherEx.Query do
     NodeExpr.build(expr, var, schema, properties)
   end
 
-  def relation(%NodeExpr{} = node, labels, properties),
-    do: RelationExpr.build(node, labels, properties)
-
-  def relation(%PathExpr{} = path, labels, properties),
-    do: RelationExpr.build(path, labels, properties)
+  def relation(path_or_node, labels, properties \\ []) do
+    if is_atom(labels) do
+      RelationExpr.build(path_or_node, [labels], properties)
+    else
+      RelationExpr.build(path_or_node, labels, properties)
+    end
+  end
 
   def return(%__MODULE__{returns: []} = query, return) when is_atom(return),
     do: %{query | returns: [return]}

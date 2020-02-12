@@ -20,7 +20,7 @@ defmodule CypherEx.Query.Validator do
   end
 
   def check_properties!(props) do
-    Enum.map(props, fn
+    Enum.each(props, fn
       {_key, val} when is_binary(val) ->
         :ok
 
@@ -36,6 +36,26 @@ defmodule CypherEx.Query.Validator do
     end)
 
     props
+  end
+
+  def validate_properties!(schema_properties, properties) do
+    valid_keys = Keyword.keys(schema_properties)
+
+    with_validator = for {k,v} <- schema_properties, into: %{} do
+      case v do
+        :string -> {k, &(is_bitstring/1)}
+        :number -> {k, &(is_number/1)}
+      end
+    end
+
+    unless Enum.all?(properties, fn
+      {given_key, given_value} ->
+        Enum.member?(valid_keys, given_key) && Map.get(with_validator, given_key).(given_value)
+    end) do
+      raise CypherEx.InvalidPropertyError
+    end
+
+    properties
   end
 
   def check_path!(%PathExpr{path: path} = expr) do

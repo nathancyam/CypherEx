@@ -1,5 +1,5 @@
 defmodule CypherEx.Query.Builder.NodeExpr do
-  alias CypherEx.Query.Builder.{PathExpr, RelationExpr}
+  alias CypherEx.Query.Builder.PathExpr
   alias CypherEx.Query.Validator
 
   defstruct [:var, :schema, :properties]
@@ -7,7 +7,7 @@ defmodule CypherEx.Query.Builder.NodeExpr do
   def build(var_or_path, schema, properties \\ [])
 
   def build(var, schema, properties) when is_atom(var) do
-    %__MODULE__{var: var, schema: schema, properties: properties}
+    %__MODULE__{var: var, schema: schema, properties: validate_properties!(schema, properties)}
   end
 
   def build(%PathExpr{} = expr, var, schema) do
@@ -15,9 +15,11 @@ defmodule CypherEx.Query.Builder.NodeExpr do
   end
 
   def build(%PathExpr{path: path} = expr, var, schema, properties) do
-    %RelationExpr{labels: labels} = List.last(path)
-    Validator.check_properties!(properties)
-    %{expr | path: path ++ [build(var, schema, properties)]}
+    %{expr | path: path ++ [build(var, schema, validate_properties!(schema, properties))]}
+  end
+
+  defp validate_properties!(schema, properties) do
+    Validator.validate_properties!(schema.__properties__(), properties)
   end
 end
 

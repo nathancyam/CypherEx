@@ -60,7 +60,8 @@ defmodule CypherEx.SchemaTest do
       |> return([:first_example])
       |> to_string()
 
-     assert match_expr == "MATCH (first_example:Example { id: \"test_id\" })-[:TEST_RELATIONSHIP]-(second_example:Example) RETURN first_example"
+    assert match_expr ==
+             "MATCH (first_example:Example { id: \"test_id\" })-[:TEST_RELATIONSHIP]-(second_example:Example) RETURN first_example"
   end
 
   test "allows multiple nodes and relationships" do
@@ -75,7 +76,8 @@ defmodule CypherEx.SchemaTest do
       |> return([:first, :second])
       |> to_string()
 
-    assert match_expr == "MATCH (third:ThirdExample)-[:TO_EXAMPLE]->(first:Example { id: \"test_id\" })-[:FROM_EXAMPLE]->(second:SecondExample) RETURN first, second"
+    assert match_expr ==
+             "MATCH (third:ThirdExample)-[:TO_EXAMPLE]->(first:Example { id: \"test_id\" })-[:FROM_EXAMPLE]->(second:SecondExample) RETURN first, second"
   end
 
   test "adds properties to the relationship" do
@@ -88,6 +90,18 @@ defmodule CypherEx.SchemaTest do
       |> return([:first])
       |> to_string()
 
-    assert match_expr == "MATCH (first:SecondExample)<-[:FROM_EXAMPLE { created_at: \"2010-01-01\" }]-(second:Example) RETURN first"
+    assert match_expr ==
+             "MATCH (first:SecondExample)<-[:FROM_EXAMPLE { created_at: \"2010-01-01\" }]-(second:Example) RETURN first"
+  end
+
+  test "fails to parse when node properties do not exist" do
+    assert_raise CypherEx.InvalidPropertyError, fn ->
+      match(
+        node(:first, Example, incorrect: true)
+        |> relation(:test_relationship)
+        |> node(:second, Example)
+      )
+      |> return([:first])
+    end
   end
 end
